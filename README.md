@@ -10,13 +10,34 @@
 
 ```
 aixue-rlhf-vf/
-├── aixue_value_function.ipynb          # 主要的价值函数模型实现
-├── aixue_value_function_filter.ipynb   # 数据过滤和预处理
-├── datasets/                           # 数据集
-│   ├── student-por_aixue.parquet      # AIXue真实学生数据集
-│   └── student-por_kaggle.csv         # Kaggle公开数据集
-└── README.md                          # 项目说明
+├── aixue_value_function_v1.ipynb         # 价值函数模型_v1
+├── aixue_value_function_v2.ipynb         # 价值函数模型_v2
+├── datasets/                             # 数据集
+│   ├── student-por_aixue.parquet        # AIXue真实学生数据集
+│   └── student-por_kaggle.csv           # Kaggle公开数据集
+└── README.md                            # 项目说明
 ```
+
+## 🧾 版本说明
+
+### v1 - 基础版本
+基础实现，包含完整的数据处理与多模型对比
+
+### v2 - 优化版本
+在 v1 基础上进行以下优化改进：
+
+#### 🔧 数据预处理优化
+- **年龄计算精度提升**: 从整数年龄改为保留小数的年龄计算(`dt.days / 365`)，提高特征精度
+- **新增年龄平方根特征**: 引入`age_sqrt = np.sqrt(age)`，增强模型对年龄非线性关系的捕捉能力  
+- **新增课程ID对数特征**: 引入`lesson_id_log = np.log1p(lesson_id)`，处理课程序号的非线性影响
+- **改进缺失值填充策略**: 使用更精确的平均值填充方法，避免数据类型转换导致的精度损失
+
+#### 📈 模型性能提升
+- **XGBoost参数精细化调优**: 增加learning_rate和gamma等关键参数的网格搜索，围绕最优值进行精确调参
+- **整体性能改善**: 通过特征工程和参数优化，多个模型的预测精度都有不同程度的提升
+
+#### 📊 评估体系完善  
+- **指标说明详细化**: 为MSE、RMSE、R²等评估指标添加详细的含义解释和评估标准
 
 ## 🎯 核心功能
 
@@ -48,8 +69,7 @@ pip install pandas numpy matplotlib seaborn scikit-learn xgboost torch
 ### 运行步骤
 1. 克隆项目到本地
 2. 确保数据集在 `datasets/` 目录下
-3. 运行 `aixue_value_function.ipynb` 进行模型训练和评估
-4. 运行 `aixue_value_function_filter.ipynb` 进行数据过滤分析
+3. 打开并运行 `aixue_value_function.ipynb`
 
 ## 📊 数据说明
 
